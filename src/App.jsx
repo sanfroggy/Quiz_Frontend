@@ -24,6 +24,7 @@ const App = () => {
         paddingLeft: 15,
         display: 'inline'
     }
+
     const setSuccessMessage = (message, timeinseconds) => {
         setMessage(message)
         setError(false)
@@ -81,7 +82,6 @@ const App = () => {
 
         setUser(null)
         window.localStorage.removeItem('loggedUserData')
-        navigate('/')
 
     }
 
@@ -93,7 +93,7 @@ const App = () => {
                 {!user ? <Link style={padding} to='/login'>Login</Link> : null}
                 {!user ? <Link style={padding} to='/signup'>Register</Link> : null}
                 {user ? <Link style={padding} to='/create'>Create a quiz</Link> : null}
-                {user ? <Link style={padding} onClick={logOut}>Logout</Link> : null}
+                {user ? <Link style={padding} to='/' onClick={logOut}>Logout</Link> : null}
                 {user ? <p>Logged in as {user.username}</p> : null}
                 <br />
                 <br />
