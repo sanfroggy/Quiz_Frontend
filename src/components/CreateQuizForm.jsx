@@ -70,6 +70,7 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user }) => {
 
             /*If an exception is caught it is printed as an error message and displayed to the user
             for 3 seconds. */
+            console.log(exception)
             errorMsgMethod(exception.response.data.error, 3)
         }
     }
