@@ -1,6 +1,7 @@
 //Importing the necessary hooks and services as well as prop-types.
 import { useState, useEffect } from 'react'
 import { useField } from '../hooks/index'
+import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import QuizService from '../services/Quizzes'
 import QuestionsService from '../services/Questions'
@@ -12,7 +13,7 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
     /*Defining "state variables" for the answer array, number of answers to be given,
     the correct answer object and the boolean result of radio button validation, when checking
     that a value is selected. Also defining a variable for the question string and 
-    the topic of the question with the defined useField custom hook. */
+    the topic of the question with the defined useField custom hook and the useNavigate hook. */
     const [answerCount, setAnswerCount] = useState(4)
     const [answers, setAnswers] = useState(new Array(parseInt(4)).fill(''))
     const [correctAnswer, setCorrectAnswer] = useState(null)
@@ -20,6 +21,7 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
 
     const question = useField('text')
     const topic = useField('text')
+    const navigate = useNavigate()
 
     /*Getting the input element for the validation of the answerCount variable and the
     addBtn button used to add a question and related answers. */
@@ -211,7 +213,7 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
                         }
 
                         //Displaying a message for 4 seconds informing the user of a successful operation.
-                        successMsgMethod(`Question ${question.title} and the given answers successfully added to ${quiz.title}`, 4)
+                        successMsgMethod(`Question ${newQuestion.title} and the given answers successfully added to ${quiz.title}`, 4)
                     }
                 }
 
@@ -272,7 +274,7 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
                 </div>
                 <br />
                 <div>
-                    <button id='saveBtn' >Save quiz and exit</button>
+                    <button id='saveBtn' onClick={() => {navigate('/quizzes') } }>Save quiz and exit</button>
                 </div>
             </form>
         </div>
