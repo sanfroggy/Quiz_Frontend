@@ -1,13 +1,20 @@
+//Importing thedefined useField custom hook, yup library and prop-types.
 import * as Yup from 'yup';
 import { useField } from '../hooks/index'
 import PropTypes from 'prop-types'
 
+/*Defining a component for creating a user object saved to mongoDB 
+through Node backend. */
 const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
 
+    /*Defining a variable for the username, password and password reentry 
+    with the defined useField custom hook. */
     const username = useField('text')
     const password = useField('password')
     const passwordReentry = useField('password')
 
+    /*Defining a validation schema for the username, password and password reentry
+    using the imported yup library. */
     const validationSchema = Yup.object().shape({
         username: Yup.string().required('Username cannot have an empty value.'),
         password: Yup.string().min(8, 'Password must have a minimum of eight characters.').
@@ -16,6 +23,8 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
             required('You must confirm the password by re-entering it.'),
     });
 
+    /*Defining a method for creating a user and saving the created object to
+    MongoDB through Node backend. */
     const handleRegister = async (event) => {
 
         event.preventDefault()
@@ -24,12 +33,16 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
             const user = username.objectProps.value
             const pwd = password.objectProps.value
             const pwdReentry = passwordReentry.objectProps.value
-            // Awaiting for Yup to validate text
+
+            /*Validating the values of the username, password
+            and passwordrReentry variables. */
             await validationSchema.validate({
                 username: user, password: pwd,
                 passwordReentry: pwdReentry
             }, { abortEarly: false });
 
+            /*If the opration is a success, a message is displayed for 3 seconds and the
+            values of the input fields are reset. */
             await registerMethod(username.objectProps.value, password.objectProps.value)
 
             successMsgMethod(`User ${username.objectProps.value} has been created successfully.`, 3)
@@ -37,6 +50,9 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
             password.reset()
 
         } catch (exception) {
+
+            /*If an exceptions are caught an error message addressing each error is displayed 
+            to the user. */
             if (exception.errors.length > 1) {
                 let errorstring = ''
                 exception.errors.forEach((error) => {
@@ -50,6 +66,7 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
         }
     }
 
+    //Returning a form with input fields and a submit button.
     return (
         <form onSubmit={handleRegister}>
             <h2>Sign up: </h2>
@@ -76,6 +93,7 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
 
 }
 
+//Defining prop validation for the SignUpForm component with PropTypes.
 SignUpForm.propTypes = {
     registerMethod: PropTypes.func.isRequired,
     errorMsgMethod: PropTypes.func.isRequired,

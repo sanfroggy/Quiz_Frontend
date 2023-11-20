@@ -6,6 +6,8 @@ import {
 import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+
+    //Defining App as a child of Router to allow use of Routes.
     <Router>
         <App />
     </Router>

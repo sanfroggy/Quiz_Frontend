@@ -1,4 +1,6 @@
-import {Routes,
+//Importing the necessary hooks, services and components.
+import {
+    Routes,
     Route, Link, useNavigate
 } from 'react-router-dom'
 import { useState } from 'react'
@@ -13,6 +15,9 @@ import QuizService from './services/Quizzes'
 
 const App = () => {
 
+    /*Defining "state variables" for the logged in user, a message string to display notifications
+    and a boolean to define if the notification is an error message. Also defining a variable for 
+    using the useNavigate hook. */
     const loggedUser = JSON.parse(window.localStorage.getItem('loggedUserData'))
     const [user, setUser] = useState(loggedUser)
     const [message, setMessage] = useState('')
@@ -20,11 +25,13 @@ const App = () => {
 
     const navigate = useNavigate()
 
+    //Defining an inline css-style for the different links.
     const padding = {
         paddingLeft: 15,
         display: 'inline'
     }
 
+    //Defining a method to display a timed success notification to the user.
     const setSuccessMessage = (message, timeinseconds) => {
         setMessage(message)
         setError(false)
@@ -34,7 +41,7 @@ const App = () => {
         }, timeinseconds * 1000)
     }
 
-
+    //Defining a method to display a timed error notification to the user.
     const setErrorMessage = (message, timeinseconds) => {
         setMessage(message)
         setError(true)
@@ -44,6 +51,9 @@ const App = () => {
         }, timeinseconds * 1000)
     }
 
+    /*Defining a method for creating a new user. If the
+    user is created successfully the useNavigate hook is used
+    to go to the "login view". If not an error message is displayed. */
     const signUp = async (username, password) => {
         try {
             await createUser({ username, password })
@@ -59,6 +69,9 @@ const App = () => {
         }
     }
 
+    /*Defining a method for logging in. If the
+    login is successful the useNavigate hook is used
+    to go to the "quiz list view". If not an error message is displayed. */
     const loginFnct = async (username, password) => {
 
         try {
@@ -78,6 +91,8 @@ const App = () => {
         }
     }
 
+    /*Defining a method for logging out. The user "state variable"
+    is set to null and the loggedUserData item is removed from localStorage. */
     const logOut = () => {
 
         setUser(null)
@@ -85,6 +100,9 @@ const App = () => {
 
     }
 
+    /*Returning links with conditional rendering depending on the logged in user.
+    Also returning routes related to these links. "Home page view" is set to be the list of 
+    available quizzes. */
     return (
         <div>
             <div>

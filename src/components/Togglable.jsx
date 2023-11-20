@@ -1,7 +1,6 @@
 /*Importing the useState and useImperativeHandle hooks,
-as well as forwardRef function. Also importing prop-types. */
+as well as forwardRef function. */
 import { useState, useImperativeHandle, forwardRef } from 'react'
-import PropTypes from 'prop-types'
 
 //Defining the Togglable component.
 const Togglable = forwardRef((props, ref) => {
@@ -38,10 +37,5 @@ const Togglable = forwardRef((props, ref) => {
 })
 
 Togglable.displayName = 'Togglable'
-
-//Using prop-types to give a warning if necessary values are not received correctly.
-Togglable.propTypes = {
-    buttonLabel: PropTypes.string.isRequired
-}
 
 export default Togglable

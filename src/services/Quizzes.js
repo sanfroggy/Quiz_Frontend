@@ -12,16 +12,18 @@ const setToken = newToken => {
     token = `Bearer ${newToken}`
 }
 
+/*Using axios.get method to get all existing quizzes
+from the Node backend and returning the response. */
 const getQuizzes = async () => {
     const response = await axios.get(baseUrl)
     return response.data
 }
 
-/*Using axios.post method to send credentials to the Node backend
-and returning the response. */
+/*Using axios.post method to send a quiz object to the Node backend
+and returning the response. A jsonwebtoken is also sent to the backend
+in the Authorization header for authorization and the Content-Type header is 
+altered to allow multer to recognize image data. */
 const createQuiz = async (quiz) => {
-
-    console.log(quiz)
 
     const config = {
         headers: {
@@ -34,4 +36,12 @@ const createQuiz = async (quiz) => {
     return response.data
 }
 
-export default { createQuiz, getQuizzes, setToken }
+/*Using axios.post method to send a created question related to a quiz
+to the Node backend and returning the response. */
+const addQuestion = async (id, question) => {
+
+    const response = await axios.post(`${baseUrl}/${id}/questions`, question)
+    return response.data
+}
+
+export default { createQuiz, getQuizzes, addQuestion, setToken }

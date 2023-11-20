@@ -1,12 +1,19 @@
+//Importing the defined useEffect and useState hooks and prop-types.
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 
+/*Defining a component for displaying the data of a single quiz object
+received from the QuizList component. */
 const Quiz = ({ quiz }) => {
 
+    /*Defining a "state variable" for topics array. */
     const [topics, setTopics] = useState([])
 
     const topicsArr = []
 
+    /*Using the topicsArr variable and the topics state variable to
+    map the topics of all questions into a single array. No topic should
+    be present in the array twice. */
     useEffect(() => {
         quiz.questions.map(question => {
             if (!topicsArr.includes(question.topic)) {
@@ -17,6 +24,9 @@ const Quiz = ({ quiz }) => {
         setTopics(topicsArr)
     }, [])
 
+    /*Returning a header with the title and author of the quiz, a list of topics
+    related to this quiz and the decorative image uploaded upon creation and received
+    from the MongoDB through Node backend. */
     return (
         <div>
             <div>
@@ -49,6 +59,7 @@ const Quiz = ({ quiz }) => {
     )
 }
 
+//Defining prop validation for the Quiz component with PropTypes.
 Quiz.propTypes = {
     quiz: PropTypes.object.isRequired
 }
