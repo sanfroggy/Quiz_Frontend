@@ -1,5 +1,6 @@
 //Importing the necessary hooks, services and components, as well as prop-types.
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { useField } from '../hooks/index'
 import QuizService from '../services/Quizzes'
 import PropTypes from 'prop-types'
@@ -8,7 +9,7 @@ import QuestionForm from './QuestionForm'
 
 /*Defining a component for creating a quiz object to be saved to mongoDB 
 through Node backend. */
-const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user }) => {
+const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) => {
 
     /*Defining "state variables" for the display image, quizSubmitted boolean and
     quiz object to be created. Also defining a variable for title and questionsMax
@@ -20,6 +21,21 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user }) => {
     const title = useField('text')
     const questionsMax = useField('number')
     const questionFormRef = useRef()
+    const params = useParams()
+
+    useEffect(() => {
+        if (!createNew) {
+            setQuizToEdit()
+        }
+    }, [])
+
+    const setQuizToEdit = async () => {
+        const id = params.id
+        const quiz = await QuizService.getQuiz(id)
+        setQuiz(quiz)
+        setQuizSubmitted(true)
+        questionFormRef.current.toggleVisibility()
+    }
 
     //Defining a method to handle creating a quiz.
     const handleCreate = async (event) => {
@@ -139,7 +155,8 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user }) => {
 CreateQuizForm.propTypes = {
     errorMsgMethod: PropTypes.func.isRequired,
     successMsgMethod: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    createNew: PropTypes.bool.isRequired
 }
 
 export default CreateQuizForm

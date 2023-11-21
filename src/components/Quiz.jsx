@@ -1,13 +1,16 @@
 //Importing the defined useEffect and useState hooks and prop-types.
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 /*Defining a component for displaying the data of a single quiz object
 received from the QuizList component. */
-const Quiz = ({ quiz }) => {
+const Quiz = ({ quiz, mydisplay }) => {
 
-    /*Defining a "state variable" for topics array. */
+    /*Defining a "state variable" for topics array and a variable for using
+    the useNavigate hook. */
     const [topics, setTopics] = useState([])
+    const navigate = useNavigate()
 
     const topicsArr = []
 
@@ -54,14 +57,18 @@ const Quiz = ({ quiz }) => {
                         src={`api/images/symbol_questionmark.png`} />}
             </div>
             <br />
-            <button style={{width: 320, height: 35, fontSize: 20} }>Play</button>
+            {!mydisplay ? <button style={{ width: 320, height: 35, fontSize: 20 }}
+                onClick={() => { navigate(`/play/${quiz.id}`) }}>Play</button> :
+                <button style={{ width: 320, height: 35, fontSize: 20 }}
+                    onClick={() => { navigate(`/edit/${quiz.id}`) }}>Edit</button>}
         </div>
     )
 }
 
 //Defining prop validation for the Quiz component with PropTypes.
 Quiz.propTypes = {
-    quiz: PropTypes.object.isRequired
+    quiz: PropTypes.object.isRequired,
+    mydisplay: PropTypes.bool.isRequired
 }
 
 export default Quiz
