@@ -9,6 +9,7 @@ import LoginForm from './components/LoginForm'
 import SignUpForm from './components/SignUpForm'
 import CreateQuizForm from './components/CreateQuizForm'
 import Notification from './components/Notification'
+import HomePage from './components/HomePage'
 import login from './services/Login'
 import createUser from './services/Users'
 import QuizService from './services/Quizzes'
@@ -16,8 +17,8 @@ import QuizService from './services/Quizzes'
 const App = () => {
 
     /*Defining "state variables" for the logged in user, a message string to display notifications
-    and a boolean to define if the notification is an error message. Also defining a variable for 
-    using the useNavigate hook. */
+    and a booleans to define if the notification is an error message as well as to define if all
+    quizzes are to be shown. Also defining a variable for using the useNavigate hook. */
     const loggedUser = JSON.parse(window.localStorage.getItem('loggedUserData'))
     const [user, setUser] = useState(loggedUser)
     const [message, setMessage] = useState('')
@@ -118,14 +119,16 @@ const App = () => {
                 <Notification message={message} isError={error} />
             </div>
             <Routes>
-                <Route path='/' element={<QuizList />} />
-                <Route path='/quizzes' element={<QuizList />} />
-                <Route path='/myquizzes' element={<QuizList />} />
+                <Route path='/' element={<HomePage />} />
+                <Route path='/quizzes' element={<QuizList all={true} />} />
+                <Route path='/myquizzes' element={<QuizList all={false} />} />
                 <Route path='/login' element={<LoginForm loginMethod={loginFnct} />} />
                 <Route path='/signup' element={<SignUpForm registerMethod={signUp} successMsgMethod={setSuccessMessage}
                     errorMsgMethod={setErrorMessage} />} />
                 <Route path='/create' element={<CreateQuizForm errorMsgMethod={setErrorMessage} user={user}
-                    successMsgMethod={setSuccessMessage} />} />
+                    successMsgMethod={setSuccessMessage} createNew={true} />} />
+                <Route path='/edit/:id' element={<CreateQuizForm errorMsgMethod={setErrorMessage} user={user}
+                    successMsgMethod={setSuccessMessage} createNew={false} />} />
             </Routes>
         </div>
     )

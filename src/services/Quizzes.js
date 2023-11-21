@@ -19,6 +19,14 @@ const getQuizzes = async () => {
     return response.data
 }
 
+/*Using axios.get method to get a single existing quizzes
+from the Node backend with an id received as a parameter
+and returning the response. */
+const getQuiz = async (id) => {
+    const response = await axios.get(`${baseUrl}/${id}`)
+    return response.data
+}
+
 /*Using axios.post method to send a quiz object to the Node backend
 and returning the response. A jsonwebtoken is also sent to the backend
 in the Authorization header for authorization and the Content-Type header is 
@@ -44,4 +52,4 @@ const addQuestion = async (id, question) => {
     return response.data
 }
 
-export default { createQuiz, getQuizzes, addQuestion, setToken }
+export default { createQuiz, getQuizzes, getQuiz, addQuestion, setToken }
