@@ -17,6 +17,21 @@ const QuizList = ({ all }) => {
         initializeQuizzes()
     }, [all])
 
+    const deleteMethod = async (quiz) => {
+        try {
+            const id = quiz.id
+            if (window.confirm(`Are you sure you want to remove 
+            ${quiz.title}?`)) {
+                QuizService.setToken(user.token)
+                await QuizService.deleteQuiz(id)
+                setQuizzes(quizzes.filter(quiz => quiz.id === id ?
+                    null : quiz))
+            }
+        } catch (exception) {
+            console.log(exception)
+        }
+    }
+
     /*Defining a method to get the array of quiz objects from the
     Node backend and set the state of the quizzes array. */
     const initializeQuizzes = async () => {
@@ -42,8 +57,10 @@ const QuizList = ({ all }) => {
         <div>
             {quizzes.length > 0 ? quizzes.map(quiz => 
                 <div key={quiz.id}>
-                    {all ? <Quiz quiz={quiz} getImageMethod={QuizService.getImage} mydisplay={false} />
-                        : <Quiz quiz={quiz} getImageMethod={QuizService.getImage} mydisplay={true} />}
+                    {all ? <Quiz quiz={quiz} getImageMethod={QuizService.getImage} mydisplay={false}
+                        handleDelete={deleteMethod} />
+                        : <Quiz quiz={quiz} getImageMethod={QuizService.getImage} mydisplay={true}
+                            handleDelete={deleteMethod} />}
                 </div>
             ) : null}
         </div>

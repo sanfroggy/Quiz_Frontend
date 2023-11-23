@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 /*Defining a component for displaying the data of a single quiz object
 received from the QuizList component. */
-const Quiz = ({ quiz, mydisplay }) => {
+const Quiz = ({ quiz, mydisplay, handleDelete }) => {
 
     /*Defining a "state variable" for topics array and a variable for using
     the useNavigate hook. */
@@ -59,8 +59,10 @@ const Quiz = ({ quiz, mydisplay }) => {
             <br />
             {!mydisplay ? <button style={{ width: 320, height: 35, fontSize: 20 }}
                 onClick={() => { navigate(`/play/${quiz.id}`) }}>Play</button> :
-                <button style={{ width: 320, height: 35, fontSize: 20 }}
-                    onClick={() => { navigate(`/edit/${quiz.id}`) }}>Edit</button>}
+                <div><button style={{ width: 320, height: 35, fontSize: 20 }}
+                    onClick={() => { navigate(`/edit/${quiz.id}`) }}>Edit</button>
+                    <br /><br /><button style={{ width: 320, height: 35, fontSize: 20 }}
+                        onClick={() => { handleDelete(quiz) }}>Delete</button></div>}  
         </div>
     )
 }
@@ -68,7 +70,8 @@ const Quiz = ({ quiz, mydisplay }) => {
 //Defining prop validation for the Quiz component with PropTypes.
 Quiz.propTypes = {
     quiz: PropTypes.object.isRequired,
-    mydisplay: PropTypes.bool.isRequired
+    mydisplay: PropTypes.bool.isRequired,
+    handleDelete: PropTypes.func.isRequired
 }
 
 export default Quiz

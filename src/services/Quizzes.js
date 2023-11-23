@@ -44,6 +44,19 @@ const createQuiz = async (quiz) => {
     return response.data
 }
 
+const deleteQuiz = async (id) => {
+
+    const config = {
+        headers: {
+            Authorization: token,
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+    return response.data
+}
+
 /*Using axios.post method to send a created question related to a quiz
 to the Node backend and returning the response. */
 const addQuestion = async (id, question) => {
@@ -52,4 +65,4 @@ const addQuestion = async (id, question) => {
     return response.data
 }
 
-export default { createQuiz, getQuizzes, getQuiz, addQuestion, setToken }
+export default { createQuiz, getQuizzes, getQuiz, deleteQuiz, addQuestion, setToken }

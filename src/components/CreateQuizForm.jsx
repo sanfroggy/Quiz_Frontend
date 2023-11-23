@@ -54,7 +54,7 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
             be passed to the backend is set to 0. If not the value is the value 
             of the input field. */
             if (questionsMax.objectProps.value < 0 ||
-                !questionsToComplete) {
+                !questionsMax.objectProps.value) {
                 questionsToComplete = 0
             } else {
                 questionsToComplete = questionsMax.objectProps.value
