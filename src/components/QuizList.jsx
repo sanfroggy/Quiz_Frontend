@@ -6,7 +6,7 @@ import Quiz from './Quiz'
 
 /*Defining a component to display a list of Quiz objects
 received from the mongoDB through Node backend. */
-const QuizList = ({ all }) => {
+const QuizList = ({ all, successMsgMethod, errorMsgMethod }) => {
 
     const user = JSON.parse(window.localStorage.getItem('loggedUserData'))
     //Defining a "state variable" for the array of quizzes.
@@ -17,6 +17,9 @@ const QuizList = ({ all }) => {
         initializeQuizzes()
     }, [all])
 
+    /*Defining a method to delete a quiz. If the removal is confirmed,
+    the id of the quiz is given to the deleteQuiz method defined in 
+    the imported QuizService. */
     const deleteMethod = async (quiz) => {
         try {
             const id = quiz.id
@@ -26,9 +29,11 @@ const QuizList = ({ all }) => {
                 await QuizService.deleteQuiz(id)
                 setQuizzes(quizzes.filter(quiz => quiz.id === id ?
                     null : quiz))
+                successMsgMethod(`Quiz ${quiz.title} removed successfully.`, 3)
             }
         } catch (exception) {
             console.log(exception)
+            errorMsgMethod(exception.response.data.error, 3)
         }
     }
 
@@ -69,7 +74,9 @@ const QuizList = ({ all }) => {
 
 //Defining prop validation for the CreateQuizForm component with PropTypes.
 QuizList.propTypes = {
-    all: PropTypes.bool.isRequired
+    all: PropTypes.bool.isRequired,
+    successMsgMethod: PropTypes.func.isRequired,
+    errorMsgMethod: PropTypes.func.isRequired
 }
 
 export default QuizList

@@ -61,44 +61,47 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
     if (addButton) {
         addButton.addEventListener('click', function () {
 
-            //Getting the radio buttons used for selecting a correct answer.
-            const radios = document.getElementsByName('correctAnswerRadio');
+            if (answerCount > 1) {
+                //Getting the radio buttons used for selecting a correct answer.
+                const radios = document.getElementsByName('correctAnswerRadio');
 
-            let selected = false;
+                let selected = false;
 
-            let i = 0;
+                let i = 0;
 
-            /*When the question object is sent to Node backend at least one of the radio buttons
-            needs to be checked to indicate a correct answer. */
-            while (!selected && i < radios.length) {
-                if (radios[i].checked) {
-                    selected = true;
+                /*When the question object is sent to Node backend at least one of the radio buttons
+                needs to be checked to indicate a correct answer. */
+                while (!selected && i < radios.length) {
+                    if (radios[i].checked) {
+                        selected = true;
+                    }
+                    i++;
                 }
-                i++;
-            }
 
-            if (selected) {
+                if (selected) {
 
-                setOptionSelected(true)
+                    setOptionSelected(true)
 
                     radios.forEach(radio => {
                         radio.setCustomValidity('')
                     })
+                } else {
+
+                    setOptionSelected(false)
+
+                    /*If no correct answer is selected the setCustomValidity function is used to display a message
+                    indicating that the user should select one of the answers to be the correct answer. */
+                    radios.forEach(radio => {
+                        if (topic && question && !answers.includes('')) {
+                            radio.setCustomValidity('Select a correct answer.');
+                            radio.checkValidity()
+                        }
+                    })
+                }
             } else {
-
-                setOptionSelected(false)
-
-                /*If no correct answer is selected the setCustomValidity function is used to display a message
-                indicating that the user should select one of the answers to be the correct answer. */
-                radios.forEach(radio => {
-                    if (topic && question && !answers.includes('')) {
-                        radio.setCustomValidity('Select a correct answer.');
-                        radio.checkValidity()
-                    }
-                })
+                setOptionSelected(true)
             }
-
-
+           
         });
     }
 

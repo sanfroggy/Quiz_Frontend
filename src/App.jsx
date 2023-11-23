@@ -4,6 +4,7 @@ import {
     Route, Link, useNavigate
 } from 'react-router-dom'
 import { useState } from 'react'
+import Play from './components/Play'
 import QuizList from './components/QuizList'
 import LoginForm from './components/LoginForm'
 import SignUpForm from './components/SignUpForm'
@@ -120,8 +121,10 @@ const App = () => {
             </div>
             <Routes>
                 <Route path='/' element={<HomePage />} />
-                <Route path='/quizzes' element={<QuizList all={true} />} />
-                <Route path='/myquizzes' element={<QuizList all={false} />} />
+                <Route path='/quizzes' element={<QuizList all={true} successMsgMethod={setSuccessMessage}
+                    errorMsgMethod={setErrorMessage} />} />
+                <Route path='/myquizzes' element={<QuizList all={false} successMsgMethod={setSuccessMessage}
+                    errorMsgMethod={setErrorMessage} />} />
                 <Route path='/login' element={<LoginForm loginMethod={loginFnct} />} />
                 <Route path='/signup' element={<SignUpForm registerMethod={signUp} successMsgMethod={setSuccessMessage}
                     errorMsgMethod={setErrorMessage} />} />
@@ -129,6 +132,7 @@ const App = () => {
                     successMsgMethod={setSuccessMessage} createNew={true} />} />
                 <Route path='/edit/:id' element={<CreateQuizForm errorMsgMethod={setErrorMessage} user={user}
                     successMsgMethod={setSuccessMessage} createNew={false} />} />
+                <Route path='/play/:id' element={<Play user={user}/>} />
             </Routes>
         </div>
     )
