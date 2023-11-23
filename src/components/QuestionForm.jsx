@@ -226,7 +226,18 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
         } catch (exception) {
             /*If an exception is caught it is printed as an error message and displayed to the user
             for 4 seconds. */
-            errorMsgMethod(exception.response.data.error, 4)
+            console.log(exception)
+            if (exception.response.data.name === 'ValidationError') {
+
+                if (exception.response.data.message.length < 60) {
+                    errorMsgMethod(exception.response.data.message.substring(34), 4)
+                } else {
+                    const msgString = `${exception.response.data.message.substring(34, 57)}
+                     ${exception.response.data.message.substring(66)}`
+                    errorMsgMethod(msgString, 4)
+                }
+            }
+            
         } 
 
     }

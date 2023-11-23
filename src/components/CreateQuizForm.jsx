@@ -86,8 +86,18 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
 
             /*If an exception is caught it is printed as an error message and displayed to the user
             for 3 seconds. */
-            console.log(exception)
-            errorMsgMethod(exception.response.data.error, 3)
+            //const msg = exception.data.errors.title.message
+            if (exception.response.data.name === 'ValidationError') {
+                if (!exception.response.data.message.includes('unique')) {
+                    errorMsgMethod(exception.response.data.message.substring(31), 3)
+                } else {
+                    errorMsgMethod(`E${exception.response.data.message.substring(39, 68)}`, 3)
+                }
+                console.log(exception)
+                
+            } else {
+                errorMsgMethod(exception.response.data.error, 3)
+            }
         }
     }
 

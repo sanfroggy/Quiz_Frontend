@@ -10,13 +10,13 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
     /*Defining a variable for the username, password and password reentry 
     with the defined useField custom hook. */
     const username = useField('text')
+    const user = username.objectProps.value
     const password = useField('password')
     const passwordReentry = useField('password')
 
     /*Defining a validation schema for the username, password and password reentry
     using the imported yup library. */
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required('Username cannot have an empty value.'),
         password: Yup.string().min(8, 'Password must have a minimum of eight characters.').
             required('Password cannot have an empty value.'),
         passwordReentry: Yup.string().oneOf([Yup.ref('password'), null], 'Password re-entry is invalid.').
@@ -30,26 +30,26 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
         event.preventDefault()
 
         try {
-            const user = username.objectProps.value
             const pwd = password.objectProps.value
             const pwdReentry = passwordReentry.objectProps.value
 
             /*Validating the values of the username, password
             and passwordrReentry variables. */
             await validationSchema.validate({
-                username: user, password: pwd,
+                password: pwd,
                 passwordReentry: pwdReentry
             }, { abortEarly: false });
 
-            /*If the opration is a success, a message is displayed for 3 seconds and the
+            /*If the operation is a success, a message is displayed for 3 seconds and the
             values of the input fields are reset. */
             await registerMethod(username.objectProps.value, password.objectProps.value)
 
-            successMsgMethod(`User ${username.objectProps.value} has been created successfully.`, 3)
+            successMsgMethod(`User ${user} has been created successfully.`, 3)
             username.reset()
             password.reset()
 
         } catch (exception) {
+            console.log(exception)
 
             /*If an exceptions are caught an error message addressing each error is displayed 
             to the user. */
@@ -60,7 +60,10 @@ const SignUpForm = ({ registerMethod, successMsgMethod, errorMsgMethod }) => {
                 })
                 errorMsgMethod(errorstring, 4.5)
             } else {
-                errorMsgMethod(exception.message, 3)
+                if (exception.name === 'ValidationError') {
+                    errorMsgMethod(exception.message, 3)
+                }
+                
             }
             
         }
