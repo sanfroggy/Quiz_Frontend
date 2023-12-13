@@ -260,18 +260,19 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
                 <br />
                 <div>
                     Question: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input name='questionInput' {...question.objectProps} />
+                    <input name='questionInput' autoComplete="off" {...question.objectProps} />
                 </div>
                 <br />
                 <div>
                     Topic: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input name='topicInput' {...topic.objectProps} />
+                    <input name='topicInput' autoComplete="off" {...topic.objectProps} />
                 </div>
                 <br />
                 {answers.length > 0 ? answers.map((answer, i) => <><div key={`answer${i}Container`}><br />
-                    {answers.length === 1 ? `Answer${i + 1} (Player has to give the exact answer.):`
-                        : `Answer${i + 1}:`} &nbsp;&nbsp;&nbsp;&nbsp;<input key={`answer${i}Text`}
+                    {answers.length === 1 ? 'Answer: (Player has to give the exact answer.):'
+                        : `Option${i + 1}:`} &nbsp;&nbsp;&nbsp;&nbsp;<input key={`answer${i}Text`}
                             name={`answer${i}`}
+                            autoComplete="off"
                             value={answer}
                             onChange={(event) => handleUserInputChange(i, event)} />
                     &nbsp;&nbsp;&nbsp;&nbsp;{answers.length > 1 ? <><input key={`answer${i}Radio`} type="radio" id={`answer${i}CorrectRadio`}

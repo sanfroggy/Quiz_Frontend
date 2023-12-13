@@ -23,7 +23,7 @@ const LoginForm = ({ loginMethod }) => {
             <h2>Log in to Quizmos: </h2>
             <div>
                 Username: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input name='userInput' {...username.objectProps} />
+                <input name='userInput' autoComplete="off" {...username.objectProps} />
             </div>
             <br />
             <div>

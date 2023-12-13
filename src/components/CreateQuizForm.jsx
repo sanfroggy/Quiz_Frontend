@@ -127,7 +127,7 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
                     {!quizSubmitted ? <div><h2>Create a quiz: </h2>
                     <div>
                         Title: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input name='titleInput' {...title.objectProps} />
+                        <input name='titleInput' autoComplete="off" {...title.objectProps} />
                     </div>
                     <br />
                     <div>
