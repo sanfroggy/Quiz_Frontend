@@ -117,9 +117,9 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
         });
     }
 
-    /*Returning a form with input fields, image upload button and a submit button.
-    Also returning a QuestionForm component as a child of the defined Togglable
-    component. */
+    /*Returning a form with input fields, image upload and remove buttons as well as a 
+    submit button. Also returning a QuestionForm component as a child of the defined 
+    Togglable component. */
     return (
         <div>
             <form onSubmit={handleCreate} encType='multipart/form-data'>
@@ -140,9 +140,11 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
                     <br /><br />
                     <button type='button'><label style={{ backgroundColor: 'buttonface' }}
                         htmlFor='image'>Choose image</label></button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{selectedImage ? selectedImage.name : null}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{selectedImage ? <div style={{ display: 'inline' }}>{selectedImage.name}
+                            &nbsp;&nbsp;&nbsp;&nbsp;<button type='button' name='resetBtn' onClick={() => setSelectedImage(null)}>
+                        Remove</button></div> : null}
                     <input type='file' accept='image/*' style={{ visibility: 'hidden' }} id='image' name='image' value=''
-                            onChange={(event) => setSelectedImage(event.target.files[0])} /> </div>:
+                            onChange={(event) => setSelectedImage(event.target.files[0])} /> </div> :
                     <div>
                         <h2>{quiz.title}:</h2>
                     </div>}
