@@ -48,7 +48,7 @@ const Play = ({ user }) => {
                 setFail(true)
             }
         } else {
-            if (givenAnswer === question.correctAnswer.title) {
+            if (givenAnswer.objectProps.value === question.correctAnswer.title) {
                 setFail(false)
                 setRandom()
             } else {
@@ -59,7 +59,11 @@ const Play = ({ user }) => {
     }
 
     const setRandom = () => {
-        if (quiz) {
+
+        console.log(questionsUsed)
+        console.log(quiz.questions.length)
+
+        if (quiz && quiz.questions.length > questionsUsed.length) {
 
             random = Math.floor(Math.random() * quiz.questions.length)
 
@@ -98,11 +102,15 @@ const Play = ({ user }) => {
                         usedAnswers.push(quiz.questions[random].answers[randomAnswers])
                     }
                 } 
-            
+
+                setAnswers(newAnswers)
+
             } else {
-                setAnswers(quiz.questions[random].answers[0])
+
+                newAnswers.push(quiz.questions[random].answers[0])
+                setAnswers(newAnswers)
             }
-            setAnswers(newAnswers)
+            
         }
     }
 
@@ -115,8 +123,10 @@ const Play = ({ user }) => {
                         <p>No high score has been set for this quiz yet.</p>}
                     {quiz.completedAt > 0 ? <p>The quiz will be completed after answering {quiz.completedAt}
                         question correctly. </p> : <p>The quiz does not have a completion limit for questions.</p>}
-                    <p>You will have a 30 seconds time limit to answer each question. <br /> <br />If the question has only
-                        one option for answering, you have to know the exact answer.</p>
+                    {quiz.timeLimitPerQuestion > 0 ? <p>You will have a {quiz.timeLimitPerQuestion} seconds time limit to answer each question. <br /> <br />
+                        If the question has only one option for answering, you have to know the exact answer.</p> :
+                        <p>This quiz does not have a time limit for answering questions. <br /> <br />
+                        If the question has only one option for answering, you have to know the exact answer.</p>}
                     <p>Press ready, when you are ready to start.</p>
                     <button style={{ width: 320, height: 35, fontSize: 22 }}
                         onClick={startQuiz}>Ready</button></div> :
@@ -128,15 +138,20 @@ const Play = ({ user }) => {
                         </div>
                         <>
                         {answers.length > 0 ?
-                            <>{answers.length === 1 ? <input name={'answerInput'} {...givenAnswer.objectProps} /> :
+                                answers.length === 1 ? <div><input name='answerInput' autoComplete="off" {...givenAnswer.objectProps} />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<button type='button'
+                                    key={`submitAnswer`}
+                                    name={`submitAnswer`}
+                                    onClick={(event) => { checkAnswer(event) }}>
+                                    Submit answer</button></div> :
                             <div>{answers.map((answer, i) => <div key={`answer${i}Container`}><br />
                                 <button type='button'
                                     key={`answer${i}Text`}
                                     name={`answer${i}`}
                                     value={answer.id}
                                     onClick={(event) => { checkAnswer(event) }}>
-                                    {String.fromCharCode('A'.charCodeAt() + i)}. {`${answer.title}`}</button></div>)}</div>}
-                            </> : null
+                                    {String.fromCharCode('A'.charCodeAt() + i)}. {`${answer.title}`}</button></div>)}</div>
+                            : null
                             }
                         </>
                     </div>

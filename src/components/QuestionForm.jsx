@@ -136,30 +136,39 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
 
         try {
 
-            /*Defining a for loop to iterate through the answers array.
-            If the answer is equal to the correct answer object it a
+            /*Defining a for loop to iterate through the answers array if more than
+            one answer exists. If the answer is equal to the correct answer object it a
             correct field is set to true, to indicate that it is the correct answer
-            and the backend should add it's value to the correctAnswer field od the 
-            Question object. */
-            for (const answer of answers) {
-                if (answer === correctAnswer) {
+            and the backend should add it's value to the correctAnswer field of the 
+            Question object. If only one exists it is automatically the correct answer. */
+            if (answerCount > 1) {
+                for (const answer of answers) {
+                    if (answer === correctAnswer) {
 
-                    const answerObj = {
-                        title: answer,
-                        correct: true
+                        const answerObj = {
+                            title: answer,
+                            correct: true
+                        }
+
+                        await QuestionsService.addAnswer(id, answerObj)
+
+                    } else {
+
+                        const answerObj = {
+                            title: answer,
+                            correct: false
+                        }
+
+                        await QuestionsService.addAnswer(id, answerObj)
                     }
-
-                    await QuestionsService.addAnswer(id, answerObj)
-
-                } else {
-
-                    const answerObj = {
-                        title: answer,
-                        correct: false
-                    }
-
-                    await QuestionsService.addAnswer(id, answerObj)
                 }
+            } else {
+                const answerObj = {
+                    title: answers[0],
+                    correct: true
+                }
+
+                await QuestionsService.addAnswer(id, answerObj)
             }
 
         } catch (exception) {

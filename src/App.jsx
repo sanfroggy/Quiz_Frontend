@@ -55,19 +55,19 @@ const App = () => {
 
     /*Defining a method for creating a new user. If the
     user is created successfully the useNavigate hook is used
-    to go to the "login view". If not an error message is displayed. */
+    to go to the "login view" and the response is returned. 
+    If the user is not created successfully, the caught error 
+    is returned. */
     const signUp = async (username, password) => {
         try {
-            await createUser({ username, password })
+            const response = await createUser({ username, password })
+            console.log(response.response.status)
             navigate('/login')
+            return response
+
         } catch (exception) {
 
-            setMessage(exception.response.data.error)
-            setError(true)
-            setTimeout(() => {
-                setMessage('')
-                setError(false)
-            }, 3000)
+            return exception.response
         }
     }
 

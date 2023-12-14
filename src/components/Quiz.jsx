@@ -57,8 +57,8 @@ const Quiz = ({ quiz, mydisplay, handleDelete }) => {
                         src={`api/images/symbol_questionmark.png`} />}
             </div>
             <br />
-            {!mydisplay ? <button style={{ width: 320, height: 35, fontSize: 20 }}
-                onClick={() => { navigate(`/play/${quiz.id}`) }}>Play</button> :
+            {!mydisplay ? quiz.questions.length > 0 ? <button style={{ width: 320, height: 35, fontSize: 20 }}
+                    onClick={() => { navigate(`/play/${quiz.id}`) }}>Play</button> : null :
                 <div><button style={{ width: 320, height: 35, fontSize: 20 }}
                     onClick={() => { navigate(`/edit/${quiz.id}`) }}>Edit</button>
                     <br /><br /><button style={{ width: 320, height: 35, fontSize: 20 }}

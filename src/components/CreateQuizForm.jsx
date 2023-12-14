@@ -12,7 +12,7 @@ through Node backend. */
 const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) => {
 
     /*Defining "state variables" for the display image, quizSubmitted boolean and
-    quiz object to be created. Also defining a variable for title and questionsMax
+    quiz object to be created. Also defining a variable for title, questionsMax and timeLimit
     variables with the defined useField custom hook as well as the ref for the Togglable 
     component. */
     const [selectedImage, setSelectedImage] = useState('')
@@ -20,6 +20,7 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
     const [quiz, setQuiz] = useState(null)
     const title = useField('text')
     const questionsMax = useField('number')
+    const timeLimit = useField('number')
     const questionFormRef = useRef()
     const params = useParams()
 
@@ -48,6 +49,7 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
             const author = user
             const image = selectedImage
             let questionsToComplete
+            let time
 
             /*If the value of the input field is smaller than 0 or the
             input field doesn't have a value, the value of the variable to
@@ -60,6 +62,17 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
                 questionsToComplete = questionsMax.objectProps.value
             }
 
+            /*If the value of the input field is smaller than 0 or the
+            input field doesn't have a value, the value of the variable to
+            be passed to the backend is set to 0. If not the value is the value 
+            of the input field. */
+            if (timeLimit.objectProps.value < 0 ||
+                !timeLimit.objectProps.value) {
+                time = 30
+            } else {
+                time = timeLimit.objectProps.value
+            }
+
             /*Setting the jsonwebtoken of the imported QuizService
             for authorization. */
             QuizService.setToken(user.token)
@@ -70,7 +83,8 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
                 title: quizTitle,
                 author: author,
                 image: image,
-                completedAt: questionsToComplete
+                completedAt: questionsToComplete,
+                timeLimitPerQuestion: time
             })
 
             /*Displaying a message informing the user of a successful operation
@@ -88,11 +102,7 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
             for 3 seconds. */
             //const msg = exception.data.errors.title.message
             if (exception.response.data.name === 'ValidationError') {
-                if (!exception.response.data.message.includes('unique')) {
-                    errorMsgMethod(exception.response.data.message.substring(31), 3)
-                } else {
-                    errorMsgMethod(`E${exception.response.data.message.substring(39, 68)}`, 3)
-                }
+                errorMsgMethod(exception.response.data.message.substring(31), 3)
                 console.log(exception)
                 
             } else {
@@ -131,9 +141,15 @@ const CreateQuizForm = ({errorMsgMethod, successMsgMethod, user, createNew }) =>
                     </div>
                     <br />
                     <div>
-                        Questions to complete: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Questions to complete (0 to disable completion.): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input id='completedAtInput' name='completedAtInput'
                             onInvalid={() => this.setCustomValidity('Enter a valid number.')} {...questionsMax.objectProps} />
+                        </div>
+                    <br />
+                    <div>
+                        Seconds to answer (0 to disable timer.): &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id='timeLimitInput' name='timeLimitInput'
+                            onInvalid={() => this.setCustomValidity('Enter a valid number.')} {...timeLimit.objectProps} />
                     </div>
                     <br />
                     Upload a decorative image:
