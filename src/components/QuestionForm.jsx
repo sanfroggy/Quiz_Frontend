@@ -131,6 +131,24 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
         setAnswers(newArr)
     }
 
+    /*Defining a method to check the given answers for possible duplicates
+    and returning the result as boolean value. */
+    const checkAnswers = () => {
+
+        let duplicateAnswers = false
+
+        if (answerCount > 1) {
+            for (const iteratedAnswer of answers) {
+                console.log(answers.filter(answer => answer === iteratedAnswer ? answer : null))
+                if (answers.filter(answer => answer === iteratedAnswer ? answer : null).length > 1) {
+                    duplicateAnswers = true
+                }
+            }
+        }
+
+        return duplicateAnswers
+    }
+
     //Defining a method to handle creating answers for a defined question.
     const handleAddAnswers = async (id) => {
 
@@ -173,9 +191,8 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
 
         } catch (exception) {
 
-            /*If an exception is caught it is printed as an error message and displayed to the user
+            /*If an exception is caught it is displayed to the user
             for 3.5 seconds. */
-            console.log(exception)
             errorMsgMethod(exception.response.data.error, 3.5)
         }
 
@@ -195,8 +212,11 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
                 topic: topic.objectProps.value
             }
 
-            //If an answer has an empty value the question is not created.
-            if (!answers.includes('')) {
+            const duplicates = checkAnswers()
+
+            /*If an answer has an empty value or the answers array contains duplicate values
+            the question is not created. */
+            if (!answers.includes('') && duplicates === false) {
 
                 if (optionSelected === true) {
 
@@ -232,7 +252,7 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
             } else {
                 /*If an exception is caught it is printed as an error message and displayed to the user
                 for 4 seconds. */
-                errorMsgMethod('All answers must have a value.', 4)
+                errorMsgMethod('All answers must have a value and the values must be different from each other.', 4.5)
             }
 
         } catch (exception) {
@@ -248,6 +268,8 @@ const QuestionForm = ({ quiz, successMsgMethod, errorMsgMethod }) => {
                      ${exception.response.data.message.substring(66)}`
                     errorMsgMethod(msgString, 4)
                 }
+            } else {
+                errorMsgMethod(exception.response.data.error, 3)
             }
             
         } 
